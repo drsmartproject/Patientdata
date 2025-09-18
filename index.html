@@ -3,47 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Sheets Test Form</title>
+  <title>Patient Data Collection Form</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input, select, button { padding: 8px; margin: 5px 0; width: 100%; box-sizing: border-box; }
+    #status { margin-top: 10px; font-weight: bold; }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
 </head>
 <body>
-  <h2>Google Sheets Test Form</h2>
-
-  <form id="testForm">
+  <h2>Patient Data Collection Form</h2>
+  <form id="patientForm">
     <label for="name">Name:</label>
-    <input type="text" id="name" required>
+    <input type="text" id="name" name="name" required>
+
+    <label for="age">Age:</label>
+    <input type="number" id="age" name="age" required>
+
+    <label for="gender">Gender:</label>
+    <select id="gender" name="gender" required>
+      <option value="">Select Gender</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Other">Other</option>
+    </select>
+
     <button type="submit">Submit</button>
   </form>
-
-  <p id="result"></p>
+  <div id="status"></div>
 
   <script>
-    document.getElementById("testForm").addEventListener("submit", function(e) {
+    const form = document.getElementById('patientForm');
+    const statusDiv = document.getElementById('status');
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const formData = { name: document.getElementById("name").value };
+      const formData = {
+        name: document.getElementById('name').value,
+        age: document.getElementById('age').value,
+        gender: document.getElementById('gender').value
+      };
 
-      // 🔴 Replace with your /exec URL
-      const googleAppsScriptUrl = "https://script.google.com/macros/s/AKfycbyEDOknR5eYNk4HDcJmSbSYHYwlEhgUgxrkVDGFWS70a-NsmZKA7-nNke2DsS8EeCeHZQ/exec";
+      try {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbyEDOknR5eYNk4HDcJmSbSYHYwlEhgUgxrkVDGFWS70a-NsmZKA7-nNke2DsS8EeCeHZQ/exec', {
+          method: 'POST',
+          body: JSON.stringify(formData),
+          headers: { 'Content-Type': 'application/json' }
+        });
 
-      document.getElementById("result").innerText = "⏳ Submitting...";
-
-      fetch(googleAppsScriptUrl, {
-        method: "POST",
-        body: JSON.stringify(formData),
-        headers: { "Content-Type": "application/json" }
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.result === "success") {
-          document.getElementById("result").innerText = "✅ Success! Row added.";
-          document.getElementById("testForm").reset();
+        if (response.ok) {
+          statusDiv.textContent = '✅ Submitted successfully!';
+          statusDiv.className = 'success';
+          setTimeout(() => {
+            location.reload(); // Auto-refresh after 1.5s
+          }, 1500);
         } else {
-          document.getElementById("result").innerText = "❌ Error: " + data.error;
+          statusDiv.textContent = '❌ Submission failed.';
+          statusDiv.className = 'error';
         }
-      })
-      .catch(err => {
-        document.getElementById("result").innerText = "❌ Fetch error: " + err.message;
-      });
+      } catch (error) {
+        statusDiv.textContent = '❌ Error: ' + error.message;
+        statusDiv.className = 'error';
+      }
     });
   </script>
 </body>
