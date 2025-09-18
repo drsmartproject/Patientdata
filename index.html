@@ -1,272 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Data Collection</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #f5f7fa;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-        }
-        
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 28px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #34495e;
-        }
-        
-        input[type="text"],
-        input[type="number"],
-        input[type="tel"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        
-        input:focus,
-        textarea:focus,
-        select:focus {
-            outline: none;
-            border-color: #3498db;
-        }
-        
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-        
-        .radio-group {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .radio-option {
-            display: flex;
-            align-items: center;
-        }
-        
-        .radio-option input {
-            margin-right: 5px;
-        }
-        
-        button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 14px 24px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            transition: background-color 0.3s;
-        }
-        
-        button:hover {
-            background-color: #2980b9;
-        }
-        
-        .notification {
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
-            display: none;
-        }
-        
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-            }
-            
-            h1 {
-                font-size: 24px;
-            }
-            
-            .radio-group {
-                flex-direction: column;
-                gap: 10px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Form → Google Sheet</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Patient Data Collection Form</h1>
-        
-        <div id="notification" class="notification"></div>
-        
-        <form id="patientForm">
-            <div class="form-group">
-                <label for="name">Name *</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="age">Age *</label>
-                <input type="number" id="age" name="age" min="0" max="120" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Gender *</label>
-                <div class="radio-group">
-                    <div class="radio-option">
-                        <input type="radio" id="male" name="gender" value="Male" required>
-                        <label for="male">Male</label>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" id="female" name="gender" value="Female" required>
-                        <label for="female">Female</label>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" id="other" name="gender" value="Other" required>
-                        <label for="other">Other</label>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" id="preferNot" name="gender" value="Prefer not to say" required>
-                        <label for="preferNot">Prefer not to say</label>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="address">Address *</label>
-                <textarea id="address" name="address" required></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label for="mobile">Mobile No *</label>
-                <input type="tel" id="mobile" name="mobile" pattern="[0-9]{10}" placeholder="10-digit mobile number" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="medicalHistory">Medical History</label>
-                <textarea id="medicalHistory" name="medicalHistory"></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label for="ptComplaint">Patient Complaint</label>
-                <textarea id="ptComplaint" name="ptComplaint"></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label for="diagnosis">Diagnosis</label>
-                <textarea id="diagnosis" name="diagnosis"></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label for="treatmentPlan">Treatment Plan</label>
-                <textarea id="treatmentPlan" name="treatmentPlan"></textarea>
-            </div>
-            
-            <button type="submit">Submit Patient Data</button>
-        </form>
-    </div>
+  <h2>Google Sheets Test Form</h2>
 
-<script>
-    document.getElementById('patientForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = {
-            name: document.getElementById('name').value,
-            age: document.getElementById('age').value,
-            gender: document.querySelector('input[name="gender"]:checked').value,
-            address: document.getElementById('address').value,
-            mobile: document.getElementById('mobile').value,
-            medicalHistory: document.getElementById('medicalHistory').value,
-            ptComplaint: document.getElementById('ptComplaint').value,
-            diagnosis: document.getElementById('diagnosis').value,
-            treatmentPlan: document.getElementById('treatmentPlan').value
-        };
+  <form id="testForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" required>
+    <button type="submit">Submit</button>
+  </form>
 
-        // Replace with your correct Web App URL (must end with /exec)
-        const googleAppsScriptUrl = "https://script.google.com/macros/s/AKfycbz-cTekaEuyjO3T4Nqwx0IikUN4kGimOwNXJNS1OP9nK-BIh5AbY28Am_xwm4RxcfR3PA/exec";
+  <p id="result"></p>
 
-        // Show "loading..."
-        showNotification("⏳ Submitting data...", "info");
+  <script>
+    document.getElementById("testForm").addEventListener("submit", function(e) {
+      e.preventDefault();
 
-        fetch(googleAppsScriptUrl, {
-            method: 'POST',
-            body: JSON.stringify(formData),
-            headers: { 'Content-Type': 'application/json' }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.result === 'success') {
-                showNotification("✅ Patient data saved successfully!", "success");
+      const formData = { name: document.getElementById("name").value };
 
-                // Reset form
-                document.getElementById('patientForm').reset();
+      // 🔴 Replace with your latest /exec URL
+      const googleAppsScriptUrl = "https://script.google.com/macros/s/AKfycbyVhWVNzOqVXmR22Vk-VwolLv5u8QtuCCwgezy8WMiOmrpNClkOuXgMEjiLqXLMr8-t8Q/exec";
 
-                // Refresh page after 2 seconds
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2000);
-            } else {
-                showNotification("❌ Error: " + data.error, "error");
-            }
-        })
-        .catch(error => {
-            showNotification("❌ Error submitting data: " + error.message, "error");
-            console.error("Error:", error);
-        });
+      document.getElementById("result").innerText = "⏳ Submitting...";
+
+      fetch(googleAppsScriptUrl, {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/json" }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.result === "success") {
+          document.getElementById("result").innerText = "✅ Success! Row added.";
+          document.getElementById("testForm").reset();
+        } else {
+          document.getElementById("result").innerText = "❌ Error: " + data.error;
+        }
+      })
+      .catch(err => {
+        document.getElementById("result").innerText = "❌ Fetch error: " + err.message;
+      });
     });
-
-    function showNotification(message, type) {
-        const notification = document.getElementById('notification');
-        notification.textContent = message;
-        notification.className = 'notification ' + type;
-        notification.style.display = 'block';
-    }
-</script>
-
+  </script>
 </body>
-
 </html>
-
